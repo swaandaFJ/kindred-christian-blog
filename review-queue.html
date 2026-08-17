@@ -1,63 +1,72 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Review Queue — Kindred Studio</title>
-<link rel="stylesheet" href="css/style.css">
-</head>
-<body>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Review Queue — Kindred Studio</title>
+		<link rel="stylesheet" href="css/style.css" />
+	</head>
+	<body>
+		<header class="nav">
+			<div class="nav-inner">
+				<a href="index.html" class="nav-logo">Kindred</a>
+				<div class="nav-actions" style="margin-left: auto">
+					<a href="index.html" class="btn btn-outline btn-sm">← Back to site</a>
+				</div>
+			</div>
+		</header>
 
-<header class="nav">
-  <div class="nav-inner">
-    <a href="index.html" class="nav-logo">Kindred</a>
-    <div class="nav-actions" style="margin-left:auto">
-      <a href="index.html" class="btn btn-outline btn-sm">← Back to site</a>
-    </div>
-  </div>
-</header>
+		<div class="studio">
+			<aside class="studio-side">
+				<div class="brand">Editor Studio</div>
+				<a href="#">Dashboard</a>
+				<a href="review-queue.html" class="active">Review Queue</a>
+				<a href="#">All Content</a>
+				<a href="#">Topics</a>
+			</aside>
 
-<div class="studio">
-  <aside class="studio-side">
-    <div class="brand">Editor Studio</div>
-    <a href="#">Dashboard</a>
-    <a href="review-queue.html" class="active">Review Queue</a>
-    <a href="#">All Content</a>
-    <a href="#">Topics</a>
-  </aside>
+			<main class="studio-main">
+				<h1 style="font-size: 26px">Review Queue</h1>
+				<p class="text-muted" style="margin-bottom: 24px">
+					Sorted oldest first — these have been waiting longest.
+				</p>
 
-  <main class="studio-main">
-    <h1 style="font-size:26px">Review Queue</h1>
-    <p class="text-muted" style="margin-bottom:24px">Sorted oldest first — these have been waiting longest.</p>
+				<div id="queueArea"></div>
+			</main>
+		</div>
 
-    <div id="queueArea"></div>
-  </main>
-</div>
+		<script src="js/data.js"></script>
+		<script src="js/app.js"></script>
+		<script>
+			const area = document.getElementById("queueArea");
+			const ageDot = { high: "🔴", medium: "🟡", low: "🟢" };
 
-<script src="js/data.js"></script>
-<script src="js/app.js"></script>
-<script>
-  const area = document.getElementById("queueArea");
-  const ageDot = { high: "🔴", medium: "🟡", low: "🟢" };
-
-  if (REVIEW_QUEUE.length === 0) {
-    area.innerHTML = emptyStateHTML("✅", "You're all caught up", "Nothing waiting for review right now.", null, "#");
-  } else {
-    area.innerHTML = `
+			if (REVIEW_QUEUE.length === 0) {
+				area.innerHTML = emptyStateHTML(
+					"✅",
+					"You're all caught up",
+					"Nothing waiting for review right now.",
+					null,
+					"#",
+				);
+			} else {
+				area.innerHTML = `
       <table>
         <thead><tr><th>Article</th><th>Writer</th><th>Topic</th><th>Submitted</th><th></th></tr></thead>
         <tbody>
-          ${REVIEW_QUEUE.map(q => `
+          ${REVIEW_QUEUE.map(
+						(q) => `
             <tr class="clickable" onclick="location.href='review-article.html?id=${q.id}'">
               <td>${ageDot[q.age]} ${q.title}</td>
               <td class="text-muted">${q.writer}</td>
               <td><span class="badge badge-topic">${q.topic}</span></td>
               <td class="text-muted">${q.submitted}</td>
               <td><a href="review-article.html?id=${q.id}" onclick="event.stopPropagation()" style="font-weight:700;color:var(--clay-700)">Review →</a></td>
-            </tr>`).join("")}
+            </tr>`,
+					).join("")}
         </tbody>
       </table>`;
-  }
-</script>
-</body>
+			}
+		</script>
+	</body>
 </html>

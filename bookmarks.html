@@ -1,65 +1,84 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>My Bookmarks — Kindred</title>
-<link rel="stylesheet" href="css/style.css">
-</head>
-<body>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>My Bookmarks — Kindred</title>
+		<link rel="stylesheet" href="css/style.css" />
+	</head>
+	<body>
+		<header class="nav">
+			<div class="nav-inner">
+				<a href="index.html" class="nav-logo">Kindred</a>
+				<nav class="nav-links" id="navLinks">
+					<a href="index.html">Home</a>
+					<a href="search.html">Search</a>
+					<a href="give.html">Give</a>
+					<a href="writer-dashboard.html">Write</a>
+				</nav>
+				<div class="nav-actions">
+					<a href="search.html" class="icon-btn" aria-label="Search">🔎</a>
+					<a href="bookmarks.html" class="icon-btn" aria-label="Bookmarks"
+						>🔖</a
+					>
+					<a href="login.html" class="btn btn-outline btn-sm" id="authLink"
+						>Log in</a
+					>
+					<a class="logout-btn icon-btn" id="signout" aria-label="Logout">🚪</a>
+				</div>
+				<button class="nav-burger" id="navBurger" aria-label="Menu">☰</button>
+			</div>
+		</header>
 
-<header class="nav">
-  <div class="nav-inner">
-    <a href="index.html" class="nav-logo">Kindred</a>
-    <nav class="nav-links" id="navLinks">
-      <a href="index.html">Home</a>
-      <a href="search.html">Search</a>
-      <a href="give.html">Give</a>
-      <a href="writer-dashboard.html">Write</a>
-    </nav>
-    <div class="nav-actions">
-      <a href="search.html" class="icon-btn" aria-label="Search">🔎</a>
-      <a href="bookmarks.html" class="icon-btn" aria-label="Bookmarks">🔖</a>
-      <a href="login.html" class="btn btn-outline btn-sm" id="authLink">Log in</a>
-      <a class="logout-btn icon-btn" id="signout" aria-label="Logout">🚪</a>
-    </div>
-    <button class="nav-burger" id="navBurger" aria-label="Menu">☰</button>
-  </div>
-</header>
+		<div class="container" style="padding-top: 32px; max-width: 1000px">
+			<h1 style="font-size: 28px">My Bookmarks</h1>
+			<p class="text-muted" style="margin-bottom: 28px">
+				Articles you've saved to read later.
+			</p>
+			<div id="bookmarksArea"></div>
+		</div>
 
-<div class="container" style="padding-top:32px; max-width:1000px">
-  <h1 style="font-size:28px">My Bookmarks</h1>
-  <p class="text-muted" style="margin-bottom:28px">Articles you've saved to read later.</p>
-  <div id="bookmarksArea"></div>
-</div>
+		<footer>
+			<div class="container footer-inner">
+				<span>© 2026 Kindred</span>
+				<div class="footer-links">
+					<a href="#">About</a><a href="#">Privacy</a>
+				</div>
+			</div>
+		</footer>
 
-<footer>
-  <div class="container footer-inner">
-    <span>© 2026 Kindred</span>
-    <div class="footer-links"><a href="#">About</a><a href="#">Privacy</a></div>
-  </div>
-</footer>
+		<script src="js/data.js"></script>
+		<script src="js/app.js"></script>
+		<script>
+			const area = document.getElementById("bookmarksArea");
 
-<script src="js/data.js"></script>
-<script src="js/app.js"></script>
-<script>
-  const area = document.getElementById("bookmarksArea");
-
-  function renderBookmarks() {
-    if (!isLoggedIn()) {
-      area.innerHTML = emptyStateHTML("🔒", "Log in to see your bookmarks", "Your saved articles live in your account — log in or create one to see them here.", "Log in", "login.html");
-      return;
-    }
-    const ids = getBookmarks();
-    const saved = ARTICLES.filter(a => ids.includes(a.id));
-    if (saved.length === 0) {
-      area.innerHTML = emptyStateHTML("🔖", "Nothing saved yet", "Tap the bookmark icon on any article to save it here for later.", "Browse articles", "index.html");
-      return;
-    }
-    area.innerHTML = `<div class="article-grid">${saved.map(articleCardHTML).join("")}</div>`;
-    wireBookmarkButtons();
-  }
-  renderBookmarks();
-</script>
-</body>
+			function renderBookmarks() {
+				if (!isLoggedIn()) {
+					area.innerHTML = emptyStateHTML(
+						"🔒",
+						"Log in to see your bookmarks",
+						"Your saved articles live in your account — log in or create one to see them here.",
+						"Log in",
+						"login.html",
+					);
+					return;
+				}
+				const ids = getBookmarks();
+				const saved = ARTICLES.filter((a) => ids.includes(a.id));
+				if (saved.length === 0) {
+					area.innerHTML = emptyStateHTML(
+						"🔖",
+						"Nothing saved yet",
+						"Tap the bookmark icon on any article to save it here for later.",
+						"Browse articles",
+						"index.html",
+					);
+					return;
+				}
+				area.innerHTML = `<div class="article-grid">${saved.map(articleCardHTML).join("")}</div>`;
+				wireBookmarkButtons();
+			}
+			renderBookmarks();
+		</script>
+	</body>
 </html>

@@ -1,133 +1,167 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Give — Kindred</title>
-<link rel="stylesheet" href="css/style.css">
-</head>
-<body>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Give — Kindred</title>
+		<link rel="stylesheet" href="css/style.css" />
+	</head>
+	<body>
+		<header class="nav">
+			<div class="nav-inner">
+				<a href="index.html" class="nav-logo">Kindred</a>
+				<nav class="nav-links" id="navLinks">
+					<a href="index.html">Home</a>
+					<a href="search.html">Search</a>
+					<a href="give.html" class="active">Give</a>
+				</nav>
+				<div class="nav-actions">
+					<a href="login.html" class="btn btn-outline btn-sm" id="authLink"
+						>Log in</a
+					>
+				</div>
+				<button class="nav-burger" id="navBurger" aria-label="Menu">☰</button>
+			</div>
+		</header>
 
-<header class="nav">
-  <div class="nav-inner">
-    <a href="index.html" class="nav-logo">Kindred</a>
-    <nav class="nav-links" id="navLinks">
-      <a href="index.html">Home</a>
-      <a href="search.html">Search</a>
-      <a href="give.html" class="active">Give</a>
-    </nav>
-    <div class="nav-actions">
-      <a href="login.html" class="btn btn-outline btn-sm" id="authLink">Log in</a>
-    </div>
-    <button class="nav-burger" id="navBurger" aria-label="Menu">☰</button>
-  </div>
-</header>
+		<div class="auth-wrap">
+			<div class="card card-pad" style="max-width: 460px; width: 100%">
+				<h1 style="font-size: 24px">Support Kindred</h1>
+				<p class="text-muted">
+					Everything we publish is free to read. Gifts from readers keep it that
+					way.
+				</p>
 
-<div class="auth-wrap">
-  <div class="card card-pad" style="max-width:460px; width:100%">
-    <h1 style="font-size:24px">Support Kindred</h1>
-    <p class="text-muted">Everything we publish is free to read. Gifts from readers keep it that way.</p>
+				<div class="freq-toggle">
+					<button class="active" data-freq="monthly">Monthly</button>
+					<button data-freq="once">One-time</button>
+				</div>
 
-    <div class="freq-toggle">
-      <button class="active" data-freq="monthly">Monthly</button>
-      <button data-freq="once">One-time</button>
-    </div>
+				<div class="amount-grid">
+					<button class="amount-btn" data-amount="10">$10</button>
+					<button class="amount-btn active" data-amount="25">$25</button>
+					<button class="amount-btn" data-amount="50">$50</button>
+					<button class="amount-btn" data-amount="100">$100</button>
+				</div>
 
-    <div class="amount-grid">
-      <button class="amount-btn" data-amount="10">$10</button>
-      <button class="amount-btn active" data-amount="25">$25</button>
-      <button class="amount-btn" data-amount="50">$50</button>
-      <button class="amount-btn" data-amount="100">$100</button>
-    </div>
+				<div class="field">
+					<label for="customAmount">Or enter a custom amount</label>
+					<input type="number" id="customAmount" min="1" placeholder="$" />
+				</div>
 
-    <div class="field">
-      <label for="customAmount">Or enter a custom amount</label>
-      <input type="number" id="customAmount" min="1" placeholder="$">
-    </div>
+				<label class="flex gap-sm" style="font-size: 14px; margin-bottom: 20px">
+					<input type="checkbox" id="coverFees" />
+					<span>Cover processing fees so 100% of my gift goes to Kindred</span>
+				</label>
 
-    <label class="flex gap-sm" style="font-size:14px; margin-bottom:20px">
-      <input type="checkbox" id="coverFees">
-      <span>Cover processing fees so 100% of my gift goes to Kindred</span>
-    </label>
+				<div class="field">
+					<label for="cardNumber">Card number</label>
+					<input
+						type="text"
+						id="cardNumber"
+						placeholder="4242 4242 4242 4242"
+						maxlength="19"
+					/>
+					<div class="hint">
+						Demo only — try 0000 to see the declined-card state.
+					</div>
+				</div>
 
-    <div class="field">
-      <label for="cardNumber">Card number</label>
-      <input type="text" id="cardNumber" placeholder="4242 4242 4242 4242" maxlength="19">
-      <div class="hint">Demo only — try 0000 to see the declined-card state.</div>
-    </div>
+				<div class="total-row">
+					<span>Total</span>
+					<span id="totalDisplay">$25.00 / month</span>
+				</div>
 
-    <div class="total-row">
-      <span>Total</span>
-      <span id="totalDisplay">$25.00 / month</span>
-    </div>
+				<button
+					class="btn btn-primary btn-block"
+					id="giveBtn"
+					style="margin-top: 12px"
+				>
+					Give now
+				</button>
+				<p class="hint" style="text-align: center; margin-top: 12px">
+					Payment is processed securely — Kindred never sees or stores your full
+					card number.
+				</p>
+			</div>
+		</div>
 
-    <button class="btn btn-primary btn-block" id="giveBtn" style="margin-top:12px">Give now</button>
-    <p class="hint" style="text-align:center; margin-top:12px">Payment is processed securely — Kindred never sees or stores your full card number.</p>
-  </div>
-</div>
+		<script src="js/app.js"></script>
+		<script>
+			let amount = 25,
+				freq = "monthly",
+				coverFees = false;
+			const FEE_RATE = 0.029;
 
-<script src="js/app.js"></script>
-<script>
-  let amount = 25, freq = "monthly", coverFees = false;
-  const FEE_RATE = 0.029;
+			document.querySelectorAll("[data-amount]").forEach((btn) => {
+				btn.addEventListener("click", () => {
+					document
+						.querySelectorAll("[data-amount]")
+						.forEach((b) => b.classList.remove("active"));
+					btn.classList.add("active");
+					amount = Number(btn.dataset.amount);
+					document.getElementById("customAmount").value = "";
+					updateTotal();
+				});
+			});
+			document.getElementById("customAmount").addEventListener("input", (e) => {
+				document
+					.querySelectorAll("[data-amount]")
+					.forEach((b) => b.classList.remove("active"));
+				amount = Number(e.target.value) || 0;
+				updateTotal();
+			});
+			document.querySelectorAll("[data-freq]").forEach((btn) => {
+				btn.addEventListener("click", () => {
+					document
+						.querySelectorAll("[data-freq]")
+						.forEach((b) => b.classList.remove("active"));
+					btn.classList.add("active");
+					freq = btn.dataset.freq;
+					updateTotal();
+				});
+			});
+			document.getElementById("coverFees").addEventListener("change", (e) => {
+				coverFees = e.target.checked;
+				updateTotal();
+			});
 
-  document.querySelectorAll("[data-amount]").forEach(btn => {
-    btn.addEventListener("click", () => {
-      document.querySelectorAll("[data-amount]").forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
-      amount = Number(btn.dataset.amount);
-      document.getElementById("customAmount").value = "";
-      updateTotal();
-    });
-  });
-  document.getElementById("customAmount").addEventListener("input", (e) => {
-    document.querySelectorAll("[data-amount]").forEach(b => b.classList.remove("active"));
-    amount = Number(e.target.value) || 0;
-    updateTotal();
-  });
-  document.querySelectorAll("[data-freq]").forEach(btn => {
-    btn.addEventListener("click", () => {
-      document.querySelectorAll("[data-freq]").forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
-      freq = btn.dataset.freq;
-      updateTotal();
-    });
-  });
-  document.getElementById("coverFees").addEventListener("change", (e) => {
-    coverFees = e.target.checked;
-    updateTotal();
-  });
+			function updateTotal() {
+				let total = amount + (coverFees ? amount * FEE_RATE : 0);
+				const suffix = freq === "monthly" ? " / month" : "";
+				document.getElementById("totalDisplay").textContent =
+					`$${total.toFixed(2)}${suffix}`;
+			}
 
-  function updateTotal() {
-    let total = amount + (coverFees ? amount * FEE_RATE : 0);
-    const suffix = freq === "monthly" ? " / month" : "";
-    document.getElementById("totalDisplay").textContent = `$${total.toFixed(2)}${suffix}`;
-  }
+			document.getElementById("giveBtn").addEventListener("click", function () {
+				if (!amount || amount <= 0) {
+					showToast("Enter an amount greater than $0 first.", "error");
+					return;
+				}
+				const card = document
+					.getElementById("cardNumber")
+					.value.replace(/\s/g, "");
+				const btn = this;
+				btn.disabled = true;
+				btn.innerHTML = `<span class="spinner"></span> Processing…`;
 
-  document.getElementById("giveBtn").addEventListener("click", function () {
-    if (!amount || amount <= 0) {
-      showToast("Enter an amount greater than $0 first.", "error");
-      return;
-    }
-    const card = document.getElementById("cardNumber").value.replace(/\s/g, "");
-    const btn = this;
-    btn.disabled = true;
-    btn.innerHTML = `<span class="spinner"></span> Processing…`;
+				setTimeout(() => {
+					if (card.startsWith("0000")) {
+						// edge case: declined card — keep the entered amount, show a specific reason, re-enable the button
+						btn.disabled = false;
+						btn.textContent = "Give now";
+						showToast("Card declined — please try a different card.", "error");
+						return;
+					}
+					sessionStorage.setItem(
+						"kindred_last_gift",
+						JSON.stringify({ amount: amount.toFixed(2), freq }),
+					);
+					location.href = "thank-you.html";
+				}, 1000);
+			});
 
-    setTimeout(() => {
-      if (card.startsWith("0000")) {
-        // edge case: declined card — keep the entered amount, show a specific reason, re-enable the button
-        btn.disabled = false;
-        btn.textContent = "Give now";
-        showToast("Card declined — please try a different card.", "error");
-        return;
-      }
-      sessionStorage.setItem("kindred_last_gift", JSON.stringify({ amount: amount.toFixed(2), freq }));
-      location.href = "thank-you.html";
-    }, 1000);
-  });
-
-  updateTotal();
-</script>
-</body>
+			updateTotal();
+		</script>
+	</body>
 </html>
