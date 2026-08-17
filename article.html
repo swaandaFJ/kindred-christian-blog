@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="pageTitle">Article — Kindred</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">Kindred</a>
+    <nav class="nav-links" id="navLinks">
+      <a href="index.html">Home</a>
+      <a href="search.html">Search</a>
+      <a href="give.html">Give</a>
+      <a href="writer-dashboard.html">Write</a>
+    </nav>
+    <div class="nav-actions">
+      <a href="search.html" class="icon-btn" aria-label="Search">🔎</a>
+      <a href="bookmarks.html" class="icon-btn" aria-label="Bookmarks">🔖</a>
+      <a href="login.html" class="btn btn-outline btn-sm" id="authLink">Log in</a>
+    </div>
+    <button class="nav-burger" id="navBurger" aria-label="Menu">☰</button>
+  </div>
+</header>
+
+<article class="container read-column article-header" id="articleRoot">
+  <!-- filled by JS; see #notFound below for the missing-article case -->
+</article>
+
+<div class="container read-column hidden" id="notFound">
+  <div class="state-box">
+    <div class="icon">🔍</div>
+    <h3>Article not found</h3>
+    <p>This link may be broken, or the article may have been removed.</p>
+    <a href="index.html" class="btn btn-primary mt-lg">Back to home</a>
+  </div>
+</div>
+
+<section id="relatedSection">
+  <div class="container">
+    <div class="section-head"><h2>Related articles</h2></div>
+    <div class="article-grid" id="relatedGrid"></div>
+  </div>
+</section>
+
+<section style="padding-top:0" id="supportSection">
+  <div class="container">
+    <div class="support-banner">
+      <div>
+        <h3>Support Kindred</h3>
+        <p>Everything here is free to read. If it's helped you, consider giving.</p>
+      </div>
+      <a href="give.html" class="btn btn-primary">Give today</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container footer-inner">
+    <span>© 2026 Kindred</span>
+    <div class="footer-links">
+      <a href="#">About</a><a href="#">Guidelines</a><a href="#">Privacy</a><a href="#">Terms</a>
+    </div>
+  </div>
+</footer>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script>
+  const params = new URLSearchParams(location.search);
+  const slug = params.get("slug");
+  const article = ARTICLES.find(a => a.slug === slug);
+
+  if (!article) {
+    // edge case: unknown/mistyped slug — show a friendly not-found state, not a crash
+    document.getElementById("articleRoot").remove();
+    document.getElementById("relatedSection").remove();
+    document.getElementById("supportSection").remove();
+    document.getElementById("notFound").classList.remove("hidden");
+  } else {
+    document.title = `${article.title} — Kindred`;
+    const initials = article.author.split(" ").map(w => w[0]).join("");
+    document.getElementById("articleRoot").innerHTML = `
+      <span class="badge badge-topic">${article.topic}</span>
+      <h1>${article.title}</h1>
+      <div class="byline">
+        <div class="avatar">${initials}</div>
+        <div>
+          <a href="#" class="author-name">${article.author}</a><br>
+          <span>${article.date} · ${article.readTime} min read</span>
+        </div>
+      </div>
+      <div class="article-body">
+        <p>${article.excerpt}</p>
+        <p>There's a particular kind of silence that settles over a season like this — not the peaceful kind, but the kind where you've run out of things to say and aren't sure what's left to bring to God.</p>
+        <blockquote>"Come to me, all you who are weary and burdened, and I will give you rest." — Matthew 11:28</blockquote>
+        <p>Scripture doesn't rush past this. The invitation isn't to perform a hope you don't feel yet — it's to stay in the room, honestly, even when you have nothing polished to offer.</p>
+        <p>That's the whole of it, really. Not a five-step plan. Just permission to come as you are, and rest.</p>
+      </div>
+      <div class="article-actions">
+        <button class="btn btn-outline" data-bookmark-id="${article.id}">☆ Save</button>
+        <button class="btn btn-outline" id="shareBtn">↗ Share</button>
+      </div>
+    `;
+    wireBookmarkButtons();
+    document.getElementById("shareBtn").addEventListener("click", () => showToast("Link copied to clipboard", "success"));
+
+    document.getElementById("relatedGrid").innerHTML = relatedArticles(article).map(articleCardHTML).join("");
+    wireBookmarkButtons();
+  }
+</script>
+</body>
+</html>

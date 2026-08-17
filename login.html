@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Log in — Kindred</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">Kindred</a>
+    <nav class="nav-links" id="navLinks">
+      <a href="index.html">Home</a>
+      <a href="search.html">Search</a>
+      <a href="give.html">Give</a>
+    </nav>
+    <div class="nav-actions"></div>
+    <button class="nav-burger" id="navBurger" aria-label="Menu">☰</button>
+  </div>
+</header>
+
+<div class="auth-wrap">
+  <div class="auth-card card card-pad">
+    <div class="auth-tabs">
+      <button class="active" id="tabLogin">Log in</button>
+      <button id="tabSignup">Sign up</button>
+    </div>
+
+    <form id="authForm">
+      <div class="field" id="fieldEmail">
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="you@example.com">
+      </div>
+      <div class="field mb-0" id="fieldPassword">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="At least 10 characters">
+      </div>
+      <p class="hint" style="margin:8px 0 20px"><a href="#" style="color:var(--clay-700); font-weight:700">Forgot password?</a></p>
+      <button type="submit" class="btn btn-primary btn-block" id="submitBtn">Log in</button>
+    </form>
+    <p class="text-muted mt-lg" style="text-align:center; font-size:13.5px">This is a demo — any email/password will work.</p>
+  </div>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script>
+  let mode = "login";
+  const tabLogin = document.getElementById("tabLogin");
+  const tabSignup = document.getElementById("tabSignup");
+  const submitBtn = document.getElementById("submitBtn");
+  const form = document.getElementById("authForm");
+  const emailField = document.getElementById("fieldEmail");
+  const passField = document.getElementById("fieldPassword");
+
+  function setMode(m) {
+    mode = m;
+    tabLogin.classList.toggle("active", m === "login");
+    tabSignup.classList.toggle("active", m === "signup");
+    submitBtn.textContent = m === "login" ? "Log in" : "Create account";
+  }
+  tabLogin.addEventListener("click", () => setMode("login"));
+  tabSignup.addEventListener("click", () => setMode("signup"));
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const email = document.getElementById("email").value.trim();
+    const pass = document.getElementById("password").value;
+    let valid = true;
+
+    [emailField, passField].forEach(f => { f.classList.remove("error"); f.querySelector(".error-msg")?.remove(); });
+
+    if (!email.includes("@")) {
+      emailField.classList.add("error");
+      emailField.insertAdjacentHTML("beforeend", `<div class="error-msg">⚠ Enter a valid email address.</div>`);
+      valid = false;
+    }
+    if (mode === "signup" && pass.length < 10) {
+      passField.classList.add("error");
+      passField.insertAdjacentHTML("beforeend", `<div class="error-msg">⚠ Use at least 10 characters.</div>`);
+      valid = false;
+    }
+    if (!pass) {
+      passField.classList.add("error");
+      passField.insertAdjacentHTML("beforeend", `<div class="error-msg">⚠ Password is required.</div>`);
+      valid = false;
+    }
+    if (!valid) return;
+
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = `<span class="spinner"></span> ${mode === "login" ? "Logging in…" : "Creating account…"}`;
+
+    setTimeout(() => {
+      setLoggedIn(true);
+      showToast(mode === "login" ? "Welcome back!" : "Account created!", "success");
+      setTimeout(() => location.href = "bookmarks.html", 500);
+    }, 900);
+  });
+</script>
+</body>
+</html>

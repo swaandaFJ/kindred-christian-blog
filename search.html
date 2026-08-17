@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Search — Kindred</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">Kindred</a>
+    <nav class="nav-links" id="navLinks">
+      <a href="index.html">Home</a>
+      <a href="search.html" class="active">Search</a>
+      <a href="give.html">Give</a>
+      <a href="writer-dashboard.html">Write</a>
+    </nav>
+    <div class="nav-actions">
+      <a href="search.html" class="icon-btn" aria-label="Search">🔎</a>
+      <a href="bookmarks.html" class="icon-btn" aria-label="Bookmarks">🔖</a>
+      <a href="login.html" class="btn btn-outline btn-sm" id="authLink">Log in</a>
+      <a class="logout-btn icon-btn" id="signout" aria-label="Logout">🚪</a>
+    </div>
+    <button class="nav-burger" id="navBurger" aria-label="Menu">☰</button>
+  </div>
+</header>
+
+<div class="container" style="padding-top:32px">
+  <h1 style="font-size:28px">Search</h1>
+
+  <div class="field" style="max-width:480px">
+    <input type="text" id="searchInput" placeholder="Try “grace”, “prayer”, or “community”…" autocomplete="off">
+  </div>
+
+  <div class="flex gap-sm" style="margin-bottom:20px; flex-wrap:wrap">
+    <span class="text-muted" style="font-size:13.5px">Demo the screen states →</span>
+    <button class="btn btn-outline btn-sm" data-state="loading">Loading</button>
+    <button class="btn btn-outline btn-sm" data-state="empty">Empty</button>
+    <button class="btn btn-outline btn-sm" data-state="error">Error</button>
+    <button class="btn btn-outline btn-sm" data-state="ready">Ready</button>
+  </div>
+
+  <div id="resultsMeta" class="text-muted" style="margin-bottom:16px; font-size:14px"></div>
+  <div id="resultsArea"></div>
+</div>
+
+<footer>
+  <div class="container footer-inner">
+    <span>© 2026 Kindred</span>
+    <div class="footer-links"><a href="#">About</a><a href="#">Guidelines</a><a href="#">Privacy</a></div>
+  </div>
+</footer>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script>
+  const input = document.getElementById("searchInput");
+  const area = document.getElementById("resultsArea");
+  const meta = document.getElementById("resultsMeta");
+  let debounceTimer;
+
+  function render(state, query = "") {
+    if (state === "loading") {
+      meta.textContent = "";
+      area.innerHTML = `<div class="article-grid">${skeletonCardsHTML(6)}</div>`;
+      return;
+    }
+    if (state === "error") {
+      meta.textContent = "";
+      area.innerHTML = errorStateHTML("retrySearch");
+      return;
+    }
+    if (state === "empty") {
+      meta.textContent = "";
+      area.innerHTML = emptyStateHTML("🔍", "No results found", `We couldn't find anything for "${query || 'that search'}". Try a broader term.`, "Browse all articles", "index.html");
+      return;
+    }
+    // ready
+    const results = query
+      ? ARTICLES.filter(a => (a.title + a.excerpt + a.topic).toLowerCase().includes(query.toLowerCase()))
+      : ARTICLES;
+    if (results.length === 0) { render("empty", query); return; }
+    meta.textContent = `${results.length} result${results.length === 1 ? "" : "s"}${query ? ` for "${query}"` : ""}`;
+    area.innerHTML = `<div class="article-grid">${results.map(articleCardHTML).join("")}</div>`;
+    wireBookmarkButtons();
+  }
+
+  function retrySearch() { render("ready", input.value.trim()); }
+
+  // debounced search-as-you-type — waits ~300ms after the user stops typing
+  input.addEventListener("input", () => {
+    clearTimeout(debounceTimer);
+    render("loading");
+    debounceTimer = setTimeout(() => render("ready", input.value.trim()), 300);
+  });
+  // Enter fires immediately, no need to wait for the debounce
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") { clearTimeout(debounceTimer); render("ready", input.value.trim()); }
+  });
+
+  document.querySelectorAll("[data-state]").forEach(btn => {
+    btn.addEventListener("click", () => render(btn.dataset.state, input.value.trim()));
+  });
+
+  render("ready");
+</script>
+</body>
+</html>

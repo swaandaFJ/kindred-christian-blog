@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kindred — Read. Reflect. Belong.</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">Kindred</a>
+    <nav class="nav-links" id="navLinks">
+      <a href="index.html" class="active">Home</a>
+      <a href="search.html">Search</a>
+      <a href="give.html">Give</a>
+      <a href="writer-dashboard.html">Write</a>
+    </nav>
+    <div class="nav-actions">
+      <a href="search.html" class="icon-btn" aria-label="Search">🔎</a>
+      <a href="bookmarks.html" class="icon-btn" aria-label="Bookmarks">🔖</a>
+      <a href="login.html" class="btn btn-outline btn-sm" id="authLink">Log in</a>
+      <a class="logout-btn icon-btn" id="signout" aria-label="Logout">🚪</a>
+    </div>
+    <button class="nav-burger" id="navBurger" aria-label="Menu">☰</button>
+  </div>
+</header>
+
+<div class="container" style="padding-top:40px">
+  <div class="devotional-hero">
+    <span class="eyebrow" id="devoDate">Today's Devotional</span>
+    <h1 id="devoTitle">Rest for the Weary</h1>
+    <span class="passage-chip" id="devoPassage">Matthew 11:28–30</span>
+    <p id="devoExcerpt">Come to me, all you who are weary and burdened, and I will give you rest.</p>
+    <a href="article.html?slug=walking-with-god-in-the-wilderness" class="btn btn-primary" style="background:#fff;color:var(--clay-800)">Read today's devotional →</a>
+  </div>
+</div>
+
+<section>
+  <div class="container">
+    <div class="section-head">
+      <h2>Recent articles</h2>
+      <a href="search.html" class="link-more">Browse all →</a>
+    </div>
+    <div class="article-grid" id="recentGrid"></div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="container">
+    <div class="support-banner">
+      <div>
+        <h3>Support Kindred</h3>
+        <p>Everything here is free to read. If it's helped you, consider giving.</p>
+      </div>
+      <a href="give.html" class="btn btn-primary">Give today</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container footer-inner">
+    <span>© 2026 Kindred</span>
+    <div class="footer-links">
+      <a href="#">About</a>
+      <a href="#">Guidelines</a>
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+      <a href="review-queue.html">Editor Studio</a>
+    </div>
+  </div>
+</footer>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script>
+  document.getElementById("devoDate").textContent = `Today's Devotional · ${DEVOTIONAL_TODAY.date}`;
+  document.getElementById("devoTitle").textContent = DEVOTIONAL_TODAY.title;
+  document.getElementById("devoPassage").textContent = DEVOTIONAL_TODAY.passage;
+  document.getElementById("devoExcerpt").textContent = DEVOTIONAL_TODAY.excerpt;
+
+  const grid = document.getElementById("recentGrid");
+  grid.innerHTML = ARTICLES.map(articleCardHTML).join("");
+  wireBookmarkButtons();
+</script>
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Review Article — Kindred Studio</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">Kindred</a>
+    <div class="nav-actions" style="margin-left:auto">
+      <a href="review-queue.html" class="btn btn-outline btn-sm">← Back to queue</a>
+    </div>
+  </div>
+</header>
+
+<div class="studio">
+  <aside class="studio-side">
+    <div class="brand">Editor Studio</div>
+    <a href="#">Dashboard</a>
+    <a href="review-queue.html" class="active">Review Queue</a>
+    <a href="#">All Content</a>
+    <a href="#">Topics</a>
+  </aside>
+
+  <main class="studio-main" style="max-width:1100px">
+    <div class="review-layout">
+      <div>
+        <span class="badge badge-topic" id="rTopic"></span>
+        <h1 id="rTitle" style="font-family:var(--font-read); font-size:30px; margin-top:8px"></h1>
+        <p class="text-muted" id="rMeta" style="margin-bottom:24px"></p>
+        <div class="article-body" id="rBody"></div>
+      </div>
+
+      <div class="review-panel">
+        <div class="card card-pad">
+          <h3 style="font-size:16px">Editorial review</h3>
+          <div class="checklist">
+            <label><input type="checkbox" checked> Relevant to Kindred's mission</label>
+            <label><input type="checkbox" checked> Clear, well-written prose</label>
+            <label><input type="checkbox"> Bible references are accurate</label>
+            <label><input type="checkbox" checked> Original work</label>
+            <label><input type="checkbox" checked> Appropriate language throughout</label>
+          </div>
+
+          <div class="field" style="margin-top:16px">
+            <label for="feedback">Feedback for the writer</label>
+            <textarea id="feedback" rows="4" placeholder="Required if you reject or request changes…"></textarea>
+            <div class="hint" id="feedbackHint">0 / 20 characters minimum for reject or request changes</div>
+          </div>
+
+          <div class="flex" style="flex-direction:column; gap:10px; margin-top:8px">
+            <button class="btn btn-primary btn-block" id="approveBtn">✓ Approve &amp; publish</button>
+            <button class="btn btn-secondary btn-block" id="changesBtn">↻ Request changes</button>
+            <button class="btn btn-danger btn-block" id="rejectBtn">✕ Reject</button>
+          </div>
+          <p class="hint mt-lg">Note: the "Approve" action is only shown here because this reviewer didn't write this article. A writer can never approve their own submission.</p>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script>
+  const d = REVIEW_ARTICLE_DETAIL;
+  document.getElementById("rTopic").textContent = d.topic;
+  document.getElementById("rTitle").textContent = d.title;
+  document.getElementById("rMeta").textContent = `By ${d.writer} · Submitted ${d.submitted}`;
+  document.getElementById("rBody").innerHTML = d.body.map(p => `<p>${p}</p>`).join("");
+
+  const feedback = document.getElementById("feedback");
+  const hint = document.getElementById("feedbackHint");
+  feedback.addEventListener("input", () => {
+    const len = feedback.value.trim().length;
+    hint.textContent = `${len} / 20 characters minimum for reject or request changes`;
+    hint.style.color = len >= 20 ? "var(--success)" : "var(--stone-400)";
+  });
+
+  function requireFeedback(actionLabel) {
+    if (feedback.value.trim().length < 20) {
+      feedback.parentElement.classList.add("error");
+      if (!feedback.parentElement.querySelector(".error-msg")) {
+        feedback.insertAdjacentHTML("afterend", `<div class="error-msg">⚠ Give the writer at least a short explanation before you ${actionLabel}.</div>`);
+      }
+      feedback.focus();
+      return false;
+    }
+    feedback.parentElement.classList.remove("error");
+    feedback.parentElement.querySelector(".error-msg")?.remove();
+    return true;
+  }
+
+  function decide(btn, label, message) {
+    btn.disabled = true;
+    const original = btn.textContent;
+    btn.innerHTML = `<span class="spinner"></span> ${label}…`;
+    setTimeout(() => {
+      showToast(message, "success");
+      setTimeout(() => location.href = "review-queue.html", 600);
+    }, 800);
+  }
+
+  document.getElementById("approveBtn").addEventListener("click", function () {
+    decide(this, "Publishing", "Article approved and published!");
+  });
+  document.getElementById("changesBtn").addEventListener("click", function () {
+    if (!requireFeedback("request changes")) return;
+    decide(this, "Sending", "Changes requested — writer notified.");
+  });
+  document.getElementById("rejectBtn").addEventListener("click", function () {
+    if (!requireFeedback("reject this")) return;
+    decide(this, "Rejecting", "Article rejected — writer notified.");
+  });
+</script>
+</body>
+</html>

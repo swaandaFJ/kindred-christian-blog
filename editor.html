@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Article Editor — Kindred</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">Kindred</a>
+    <div class="nav-actions" style="margin-left:auto">
+      <span class="save-status" id="saveStatus">●&nbsp; Not saved yet</span>
+      <a href="writer-dashboard.html" class="btn btn-outline btn-sm">← Back to dashboard</a>
+      <a class="logout-btn icon-btn" id="signout" aria-label="Logout">🚪</a>
+    </div>
+  </div>
+</header>
+
+<div class="studio">
+  <aside class="studio-side">
+    <div class="brand">Writer Studio</div>
+    <a href="writer-dashboard.html">Dashboard</a>
+    <a href="editor.html" class="active">New Article</a>
+    <a href="#">My Profile</a>
+  </aside>
+
+  <main class="studio-main" style="max-width:1100px">
+    <div class="editor-grid">
+      <div class="editor-canvas">
+        <div class="field">
+          <input type="text" class="title" id="titleInput" placeholder="Article title…">
+        </div>
+        <div class="field">
+          <textarea class="body" id="bodyInput" placeholder="Start writing here…"></textarea>
+        </div>
+      </div>
+
+      <div>
+        <div class="card card-pad" style="margin-bottom:16px">
+          <div class="field">
+            <label>Cover image</label>
+            <div class="cover-drop">Drop an image here, or click to upload</div>
+          </div>
+          <div class="field mb-0">
+            <label for="topicSelect">Topic</label>
+            <select id="topicSelect">
+              <option value="">Select a topic…</option>
+              <option>Faith &amp; Doubt</option>
+              <option>Spiritual Habits</option>
+              <option>Mental Health</option>
+              <option>Bible Study</option>
+              <option>Community</option>
+              <option>Prayer</option>
+            </select>
+          </div>
+        </div>
+
+        <button class="btn btn-primary btn-block" id="submitBtn">Submit for review</button>
+        <p class="hint" style="text-align:center; margin-top:10px">Autosaves every 20 seconds while you write.</p>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script>
+  const titleInput = document.getElementById("titleInput");
+  const bodyInput = document.getElementById("bodyInput");
+  const saveStatus = document.getElementById("saveStatus");
+  const submitBtn = document.getElementById("submitBtn");
+  let dirty = false;
+  let autosaveTimer;
+
+  // pre-fill if editing an existing draft
+  const id = new URLSearchParams(location.search).get("id");
+  const existing = WRITER_ARTICLES.find(a => String(a.id) === id);
+  if (existing) {
+    titleInput.value = existing.title;
+    bodyInput.value = "There's a particular kind of silence that settles over a hard season…";
+    document.getElementById("topicSelect").value = existing.topic;
+    saveStatus.textContent = "● Saved";
+    saveStatus.classList.add("saved");
+  }
+
+  function markDirty() {
+    dirty = true;
+    saveStatus.textContent = "● Unsaved changes";
+    saveStatus.classList.remove("saved");
+    clearTimeout(autosaveTimer);
+    // autosave fires ~1.2s after typing stops, standing in for the real 20s interval
+    autosaveTimer = setTimeout(autosave, 1200);
+  }
+  function autosave() {
+    if (!dirty) return;
+    saveStatus.textContent = "● Saving…";
+    setTimeout(() => {
+      saveStatus.textContent = `● Saved just now`;
+      saveStatus.classList.add("saved");
+      dirty = false;
+    }, 500);
+  }
+  [titleInput, bodyInput].forEach(el => el.addEventListener("input", markDirty));
+
+  // warn on navigating away with unsaved changes
+  window.addEventListener("beforeunload", (e) => {
+    if (dirty) { e.preventDefault(); e.returnValue = ""; }
+  });
+
+  submitBtn.addEventListener("click", () => {
+    if (!titleInput.value.trim() || !bodyInput.value.trim()) {
+      showToast("Add a title and some content before submitting.", "error");
+      if (!titleInput.value.trim()) titleInput.focus(); else bodyInput.focus();
+      return;
+    }
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = `<span class="spinner"></span> Submitting…`;
+    setTimeout(() => {
+      dirty = false;
+      showToast("Submitted for review!", "success");
+      setTimeout(() => location.href = "writer-dashboard.html", 600);
+    }, 900);
+  });
+</script>
+</body>
+</html>
