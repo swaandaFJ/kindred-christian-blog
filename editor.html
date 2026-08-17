@@ -74,6 +74,7 @@
   const submitBtn = document.getElementById("submitBtn");
   let dirty = false;
   let autosaveTimer;
+  let ago;
 
   // pre-fill if editing an existing draft
   const id = new URLSearchParams(location.search).get("id");
@@ -91,6 +92,7 @@
     saveStatus.textContent = "● Unsaved changes";
     saveStatus.classList.remove("saved");
     clearTimeout(autosaveTimer);
+    clearTimeout(ago);
     // autosave fires ~1.2s after typing stops, standing in for the real 20s interval
     autosaveTimer = setTimeout(autosave, 1200);
   }
@@ -98,9 +100,19 @@
     if (!dirty) return;
     saveStatus.textContent = "● Saving…";
     setTimeout(() => {
+      if (titleInput.value.trim() === "" && bodyInput.value.trim() === "") {
+        saveStatus.textContent = "● Not saved yet";
+        saveStatus.classList.remove("saved");
+        return;
+      }
+    }, 600);
+    setTimeout(() => {
       saveStatus.textContent = `● Saved just now`;
       saveStatus.classList.add("saved");
       dirty = false;
+      ago = setTimeout(() => {
+        saveStatus.textContent = "● Saved";
+      }, 10000);
     }, 500);
   }
   [titleInput, bodyInput].forEach(el => el.addEventListener("input", markDirty));
