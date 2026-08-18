@@ -22,29 +22,26 @@ function setLoggedIn(val) {
 }
 function reflectAuthState() {
 	const authLink = document.getElementById("authLink");
-	const logout = document.getElementById("signout");
 	if (!authLink) return;
 	if (isLoggedIn()) {
 		authLink.textContent = "Account";
 		authLink.href = "bookmarks.html";
-		logout.classList.remove("logged-out");
 	} else {
 		authLink.textContent = "Log in";
 		authLink.href = "login.html";
-		logout.classList.add("logged-out");
 	}
 }
 
 // ---------- log out ----------
 const logout = document.getElementById("signout");
+(!isLoggedIn()) ? logout.classList.add("logged-out") : logout.classList.remove("logged-out");
 logout.addEventListener("click", (event) => {
 	if (!isLoggedIn()) return;
-	else {
-		setLoggedIn(false);
-		showToast("Logged out!", "success");
-		setTimeout(() => (location.href = "index.html"), 500);
-	}
-});
+	setLoggedIn(false);
+	showToast("Logged out!", "success");
+	logout.classList.add("logged-out");
+	setTimeout(() => (location.href = "index.html"), 500);
+})
 
 // ---------- bookmarks (localStorage) ----------
 function getBookmarks() {
