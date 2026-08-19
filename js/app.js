@@ -25,10 +25,10 @@ function reflectAuthState() {
 	if (!authLink) return;
 	if (isLoggedIn()) {
 		authLink.textContent = "Account";
-		authLink.href = "bookmarks.html";
+		authLink.href = "/pages/bookmarks.html";
 	} else {
 		authLink.textContent = "Log in";
-		authLink.href = "login.html";
+		authLink.href = "/pages/login.html";
 	}
 }
 
@@ -40,7 +40,7 @@ logout.addEventListener("click", (event) => {
 	setLoggedIn(false);
 	showToast("Logged out!", "success");
 	logout.classList.add("logged-out");
-	setTimeout(() => (location.href = "index.html"), 500);
+	setTimeout(() => (location.href = "/index.html"), 500);
 })
 
 // ---------- bookmarks (localStorage) ----------
@@ -160,12 +160,12 @@ function articleCardHTML(a) {
 	const initial = a.topic ? a.topic[0] : "K";
 	return `
   <div class="card card-hover article-card">
-    <a href="article.html?slug=${a.slug}" style="color:inherit">
+    <a href="/pages/article.html?slug=${a.slug}" style="color:inherit">
       <div class="cover"><span>${initial}</span></div>
     </a>
     <div class="body">
       <span class="badge badge-topic" style="align-self:flex-start">${a.topic}</span>
-      <a href="article.html?slug=${a.slug}" style="color:inherit"><h3>${a.title}</h3></a>
+      <a href="/pages/article.html?slug=${a.slug}" style="color:inherit"><h3>${a.title}</h3></a>
       <p class="excerpt">${a.excerpt}</p>
       <div class="card-footer">
         <span class="meta">${a.author} · ${a.date}</span>

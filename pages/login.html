@@ -4,14 +4,14 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Log in — Kindred</title>
-		<link rel="stylesheet" href="css/style.css" />
+		<link rel="stylesheet" href="../css/style.css" />
 	</head>
 	<body>
 		<header class="nav">
 			<div class="nav-inner">
-				<a href="index.html" class="nav-logo">Kindred</a>
+				<a href="../index.html" class="nav-logo">Kindred</a>
 				<nav class="nav-links" id="navLinks">
-					<a href="index.html">Home</a>
+					<a href="../index.html">Home</a>
 					<a href="search.html">Search</a>
 					<a href="give.html">Give</a>
 				</nav>
@@ -62,8 +62,8 @@
 			</div>
 		</div>
 
-		<script src="js/data.js"></script>
-		<script src="js/app.js"></script>
+		<script src="../js/data.js"></script>
+		<script src="../js/app.js"></script>
 		<script>
 			let mode = "login";
 			const tabLogin = document.getElementById("tabLogin");
@@ -128,7 +128,7 @@
 						mode === "login" ? "Welcome back!" : "Account created!",
 						"success",
 					);
-					setTimeout(() => (location.href = "bookmarks.html"), 500);
+					setTimeout(() => (location.href = "/pages/bookmarks.html"), 500);
 				}, 900);
 			});
 		</script>

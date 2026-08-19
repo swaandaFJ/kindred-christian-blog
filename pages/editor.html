@@ -4,12 +4,12 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Article Editor — Kindred</title>
-		<link rel="stylesheet" href="css/style.css" />
+		<link rel="stylesheet" href="../css/style.css" />
 	</head>
 	<body>
 		<header class="nav">
 			<div class="nav-inner">
-				<a href="index.html" class="nav-logo">Kindred</a>
+				<a href="../index.html" class="nav-logo">Kindred</a>
 				<div class="nav-actions" style="margin-left: auto">
 					<span class="save-status" id="saveStatus">●&nbsp; Not saved yet</span>
 					<a href="writer-dashboard.html" class="btn btn-outline btn-sm"
@@ -81,8 +81,8 @@
 			</main>
 		</div>
 
-		<script src="js/data.js"></script>
-		<script src="js/app.js"></script>
+		<script src="../js/data.js"></script>
+		<script src="../js/app.js"></script>
 		<script>
 			const titleInput = document.getElementById("titleInput");
 			const bodyInput = document.getElementById("bodyInput");
@@ -156,7 +156,7 @@
 				setTimeout(() => {
 					dirty = false;
 					showToast("Submitted for review!", "success");
-					setTimeout(() => (location.href = "writer-dashboard.html"), 600);
+					setTimeout(() => (location.href = "/pages/writer-dashboard.html"), 600);
 				}, 900);
 			});
 		</script>

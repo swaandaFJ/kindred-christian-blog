@@ -4,14 +4,14 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Review Queue — Kindred Studio</title>
-		<link rel="stylesheet" href="css/style.css" />
+		<link rel="stylesheet" href="../css/style.css" />
 	</head>
 	<body>
 		<header class="nav">
 			<div class="nav-inner">
-				<a href="index.html" class="nav-logo">Kindred</a>
+				<a href="../index.html" class="nav-logo">Kindred</a>
 				<div class="nav-actions" style="margin-left: auto">
-					<a href="index.html" class="btn btn-outline btn-sm">← Back to site</a>
+					<a href="../index.html" class="btn btn-outline btn-sm">← Back to site</a>
 				</div>
 			</div>
 		</header>
@@ -35,8 +35,8 @@
 			</main>
 		</div>
 
-		<script src="js/data.js"></script>
-		<script src="js/app.js"></script>
+		<script src="../js/data.js"></script>
+		<script src="../js/app.js"></script>
 		<script>
 			const area = document.getElementById("queueArea");
 			const ageDot = { high: "🔴", medium: "🟡", low: "🟢" };
@@ -56,7 +56,7 @@
         <tbody>
           ${REVIEW_QUEUE.map(
 						(q) => `
-            <tr class="clickable" onclick="location.href='review-article.html?id=${q.id}'">
+            <tr class="clickable" onclick="location.href='/pages/review-article.html?id=${q.id}'">
               <td>${ageDot[q.age]} ${q.title}</td>
               <td class="text-muted">${q.writer}</td>
               <td><span class="badge badge-topic">${q.topic}</span></td>

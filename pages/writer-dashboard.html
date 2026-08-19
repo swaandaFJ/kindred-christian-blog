@@ -4,14 +4,14 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Writer Dashboard — Kindred</title>
-		<link rel="stylesheet" href="css/style.css" />
+		<link rel="stylesheet" href="../css/style.css" />
 	</head>
 	<body>
 		<header class="nav">
 			<div class="nav-inner">
-				<a href="index.html" class="nav-logo">Kindred</a>
+				<a href="../index.html" class="nav-logo">Kindred</a>
 				<div class="nav-actions" style="margin-left: auto">
-					<a href="index.html" class="btn btn-outline btn-sm">← Back to site</a>
+					<a href="../index.html" class="btn btn-outline btn-sm">← Back to site</a>
 					<a class="logout-btn icon-btn" id="signout" aria-label="Logout">🚪</a>
 				</div>
 			</div>
@@ -58,8 +58,8 @@
 			</main>
 		</div>
 
-		<script src="js/data.js"></script>
-		<script src="js/app.js"></script>
+		<script src="../js/data.js"></script>
+		<script src="../js/app.js"></script>
 		<script>
 			document.getElementById("statTotal").textContent = WRITER_ARTICLES.length;
 			document.getElementById("statPublished").textContent =
@@ -84,12 +84,12 @@
         <tbody>
           ${WRITER_ARTICLES.map(
 						(a) => `
-            <tr class="clickable" onclick="location.href='editor.html?id=${a.id}'">
+            <tr class="clickable" onclick="location.href='/pages/editor.html?id=${a.id}'">
               <td>${a.title}</td>
               <td class="text-muted">${a.topic}</td>
               <td>${statusBadge(a.status)}</td>
               <td class="text-muted">${a.updated}</td>
-              <td><a href="editor.html?id=${a.id}" onclick="event.stopPropagation()" style="font-weight:700;color:var(--clay-700)">Edit →</a></td>
+              <td><a href="/pages/editor.html?id=${a.id}" onclick="event.stopPropagation()" style="font-weight:700;color:var(--clay-700)">Edit →</a></td>
             </tr>`,
 					).join("")}
         </tbody>
