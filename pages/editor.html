@@ -92,6 +92,9 @@
 			let autosaveTimer;
 			let ago;
 
+			// authentication logic
+			if (!isLoggedIn()) location.replace("/pages/login.html?redirect_error");
+
 			// pre-fill if editing an existing draft
 			const id = new URLSearchParams(location.search).get("id");
 			const existing = WRITER_ARTICLES.find((a) => String(a.id) === id);

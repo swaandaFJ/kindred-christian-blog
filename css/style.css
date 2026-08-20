@@ -676,11 +676,14 @@ footer {
 
 /* ---------------- Auth card ---------------- */
 .auth-wrap {
+	min-height: 0;
+	overflow-y: auto;
 	display: flex;
 	justify-content: center;
 	padding: var(--sp-3xl) var(--sp-lg);
 }
 .auth-card {
+	margin: auto 0;
 	width: 100%;
 	max-width: 26.25rem;
 }

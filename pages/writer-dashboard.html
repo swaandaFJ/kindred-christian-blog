@@ -68,6 +68,9 @@
 				WRITER_ARTICLES.filter((a) => a.status === "in_review").length;
 
 			const area = document.getElementById("tableArea");
+			
+			// authentication logic
+			if (!isLoggedIn()) location.replace("/pages/login.html?redirect_error");
 
 			if (WRITER_ARTICLES.length === 0) {
 				area.innerHTML = emptyStateHTML(

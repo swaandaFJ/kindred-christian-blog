@@ -25,7 +25,7 @@ function reflectAuthState() {
 	if (!authLink) return;
 	if (isLoggedIn()) {
 		authLink.textContent = "Account";
-		authLink.href = "/pages/bookmarks.html";
+		authLink.href = "/pages/writer-dashboard.html";
 	} else {
 		authLink.textContent = "Log in";
 		authLink.href = "/pages/login.html";
@@ -34,8 +34,15 @@ function reflectAuthState() {
 
 // ---------- log out ----------
 const logout = document.getElementById("signout");
-(!isLoggedIn()) ? logout.classList.add("logged-out") : logout.classList.remove("logged-out");
-logout.addEventListener("click", (event) => {
+const writeMenu = document.querySelector("nav > [href]:last-of-type");
+if (!isLoggedIn()) {
+	if (logout) logout.classList.add("logged-out");
+	writeMenu.style.display = "none";
+} else {
+	logout.classList.remove("logged-out");
+	if (writeMenu) writeMenu.style.display = "inline";
+}
+if (logout) logout.addEventListener("click", (event) => {
 	if (!isLoggedIn()) return;
 	setLoggedIn(false);
 	showToast("Logged out!", "success");

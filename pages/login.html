@@ -5,6 +5,13 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Log in — Kindred</title>
 		<link rel="stylesheet" href="../css/style.css" />
+		<style>
+			body {
+				display: grid;
+				grid-template-rows: auto 1fr;
+				height: 100vh;
+			}
+		</style>
 	</head>
 	<body>
 		<header class="nav">
@@ -72,6 +79,10 @@
 			const form = document.getElementById("authForm");
 			const emailField = document.getElementById("fieldEmail");
 			const passField = document.getElementById("fieldPassword");
+
+			// authentication logic
+			if (isLoggedIn()) location.replace("/index.html");
+			if (location.search.includes("redirect_error")) setTimeout(() => showToast("Unauthorised! — Login to gain access.", "error"), 400);
 
 			function setMode(m) {
 				mode = m;
